@@ -1,23 +1,28 @@
 package com.example.android.miwok;
 
 import android.app.Activity;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
-import java.util.LinkedList;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
 /**
  * Created by zan on 01/08/2016.
  */
 public class WordAdapter extends ArrayAdapter<Word> {
 
-    public WordAdapter(Activity context, ArrayList<Word> words){
-        super(context, 0, words);
+    private int mColorResourceID;
+
+    public WordAdapter(Activity context, ArrayList<Word> words, int colorResourceID){
+        super(context,0, words);
+        mColorResourceID = colorResourceID;
     }
 
     @Override
@@ -44,8 +49,20 @@ public class WordAdapter extends ArrayAdapter<Word> {
         // the default TextView.
         defaultTextView.setText(currentWord.getDefaultTrans());
 
+        ImageView imageView = (ImageView)listItemView.findViewById(R.id.image);
+        if(currentWord.hasImage()) {
+            imageView.setImageResource(currentWord.getImageResourceID());
+        }else{
+            imageView.setVisibility(View.GONE);
+        }
+
+        View textContainer = listItemView.findViewById(R.id.text_container);
+        int color = ContextCompat.getColor(getContext(), mColorResourceID);
+        textContainer.setBackgroundColor(color);
+
         // Return the whole list item layout (containing 2 TextViews) so that it can be shown in
         // the ListView.
         return listItemView;
+
     }
 }
